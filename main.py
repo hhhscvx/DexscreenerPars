@@ -1,38 +1,19 @@
-import time
+import requests
 
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
+from config import settings
 
 
-chrome_options = Options()
-chrome_options.add_argument("--start-maximized")
-chrome_options.add_argument("--disable-notifications")
-
-service = Service(ChromeDriverManager().install())
-driver = webdriver.Chrome(service=service, options=chrome_options)
-
-
-driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
-    'source': '''
-        delete window.cdc_adoQpoasnfa76pfcZLmcfl_Array;
-        delete window.cdc_adoQpoasnfa76pfcZLmcfl_Promise;
-        delete window.cdc_adoQpoasnfa76pfcZLmcfl_Symbol;
-        delete window.cdc_adoQpoasnfa76pfcZLmcfl_JSON;
-        delete window.cdc_adoQpoasnfa76pfcZLmcfl_Object;
-        delete window.cdc_adoQpoasnfa76pfcZLmcfl_Proxy;
-  '''
-})
+url = 'https://dexscreener.com/solana?rankBy=trendingScoreH6&order=asc&dexIds=raydium&minLiq=1000&minMarketCap=800000&maxFdv=200000000&maxAge=12&min24HVol=3500000&profile=1'
+apikey = settings.ZENROWS_API_KEY
+params = {
+    'url': url,
+    'apikey': apikey,
+    'js_render': 'true',
+    'premium_proxy': 'true',
+}
+response = requests.get('https://api.zenrows.com/v1/', params=params)
+print(response.text)
 
 
-try:
-    url = "https://dexscreener.com/solana?rankBy=trendingScoreH6&order=desc&dexIds=raydium&minLiq=1000&minMarketCap=800000&maxFdv=200000000&maxAge=12&min24HVol=3500000&profile=1"
-    driver.get(url)
-    time.sleep(80)
-
-except Exception as e:
-    print("Элемент не найден:", e)
-finally:
-    driver.quit()
-    driver.close
+with open('dexscreener.html', mode='w', encoding='utf-8') as file:
+    file.write(response.text)

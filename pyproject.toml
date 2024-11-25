@@ -6,9 +6,10 @@ authors = ["hhhscvx <hhhscvx@yandex.ru>"]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-selenium = "^4.26.1"
-webdriver-manager = "^4.0.2"
 loguru = "^0.7.2"
+pydantic-settings = "^2.6.1"
+requests = "^2.32.3"
+beautifulsoup4 = "^4.12.3"
 
 [tool.poetry.dev-dependencies]
 
